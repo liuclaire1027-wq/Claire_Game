@@ -39,12 +39,9 @@ public class BasicGameApp implements Runnable, KeyListener {
     Image alienImage;
     Cat cat;
     Image catImage;
-    Meteor meteor1;
-    Meteor meteor2;
-    Meteor meteor3;
-    Meteor meteor4;
-    Meteor meteor5;
-    Image metorImage;
+
+    Image meteorImage;
+    Meteor[] meteorShower;
     Image space = Toolkit.getDefaultToolkit().getImage("space.png");
     Image boom = Toolkit.getDefaultToolkit().getImage("boom.png");
     Portal portal1;
@@ -75,27 +72,18 @@ public class BasicGameApp implements Runnable, KeyListener {
         pressingKey = false;
         alien = new Alien("alien.png", 600, 200, 0.75);
         alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
-//        cat = new Cat("cat.png", 300, 500, 0.25);
-//        catImage = Toolkit.getDefaultToolkit().getImage("cat.png");
+        cat = new Cat("cat.png", 300, 500, 0.25);
+        catImage = Toolkit.getDefaultToolkit().getImage("cat.png");
         portal1 = new Portal("portal.png", 700,600,0.5);
         portal2 = new Portal("portal.png", 100,100,0.5);
-        meteor1 = new Meteor("meteor.png",100, 100, 0.5);
-        meteor2 = new Meteor("meteor.png",600, 600, 0.5);
-        meteor3 = new Meteor("meteor.png",500, 300, 0.5);
-        meteor4 = new Meteor("meteor.png",200, 500, 0.5);
-        meteor5 = new Meteor("meteor.png",300, 200, 0.5);
-        meteor5.dx = -meteor5.dx;
-        meteor5.dy = -meteor5.dy;
-        meteor2.dx = -meteor2.dx;
-        meteor2.dy = -meteor2.dy;
-        portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
-        metorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
-
-        cat = new Cat("cat.png",200, 200, 0.5);
-        for(int i = 0; i < 10; i++) {
-            Cat cat = new Cat("cat.png", 500, 200, 0.75);
+        meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
+        meteorShower = new Meteor[6];
+        for (int i = 0; i < meteorShower.length; i ++) {
+            meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random()*WIDTH), (int) (Math.random()*HEIGHT), 0.5);
         }
-        catImage = Toolkit.getDefaultToolkit().getImage("cat.png");
+
+        portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
+
 
         run();
 
@@ -113,10 +101,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         //for the moment we will loop things forever.
         while (true) {
             moveThings();//move all the game objects
-//            if(astro.isAlive == false){
-//                astro.width += 10;
-//                astro.height += 10;
-//            }
+
 
             render();  // paint the graphics
             pause(30); // sleep for 10 ms
@@ -127,12 +112,11 @@ public class BasicGameApp implements Runnable, KeyListener {
         if(pressingKey){
             alien.move();
         }
-        meteor1.move();
-        meteor2.move();
-        meteor3.move();
-        meteor4.move();
-        meteor5.move();
-        //cat.wrap();
+        for(int i = 0; i < meteorShower.length; ++i){
+            meteorShower[i].move();
+        }
+
+
         if(pressingKey){
             for(int x = 0; x < 10; ++x) {
                 cat.move();
@@ -161,63 +145,29 @@ public class BasicGameApp implements Runnable, KeyListener {
     }
 
     public void alienmeteorcheckCrash(){
-        if (meteor1.rect.intersects(alien.rect) || meteor2.rect.intersects(alien.rect) || meteor3.rect.intersects(alien.rect) || meteor4.rect.intersects(alien.rect) || meteor5.rect.intersects(alien.rect) && firstCrash == true){
-            firstCrash = false;
-            alien.isAlive = false;
-            alien.dx = 0;
-            alien.dy = 0;
-            if(meteor1.rect.intersects(alien.rect)) {
-                meteor1.dx = -meteor1.dx;
-                meteor1.dy = -meteor1.dy;
-            } else if(meteor2.rect.intersects(alien.rect)) {
-                meteor2.dx = -meteor2.dx;
-                meteor2.dy = -meteor2.dy;
-            } else if(meteor3.rect.intersects(alien.rect)) {
-                meteor3.dx = -meteor3.dx;
-                meteor3.dy = -meteor3.dy;
-            } else if(meteor4.rect.intersects(alien.rect)) {
-                meteor4.dx = -meteor4.dx;
-                meteor4.dy = -meteor4.dy;
-            } else if(meteor5.rect.intersects(alien.rect)) {
-                meteor5.dx = -meteor5.dx;
-                meteor5.dy = -meteor5.dy;
+        for(int i = 0 ; i<meteorShower.length; ++i){
+            if (meteorShower[i].rect.intersects(alien.rect) && firstCrash == true) {
+                firstCrash = false;
+                alien.isAlive = false;
+                alien.dx = 0;
+                alien.dy = 0;
             }
-//            meteor1.height += 10;
-//            meteor1.width +=10;
-//            alien.health -=5;
+        }
 
-        }
-        if(alien.rect.intersects(meteor1.rect) == false){
-            firstCrash = true;
-        }
     }
     public void aliencatcheckCrash(){
-        if (meteor1.rect.intersects(cat.rect) || meteor2.rect.intersects(cat.rect) || meteor3.rect.intersects(cat.rect) || meteor4.rect.intersects(cat.rect) || meteor5.rect.intersects(cat.rect) && firstCrash == true) {
-            firstCrash = false;
-            cat.isAlive = false;
-            if (meteor1.rect.intersects(cat.rect)){
-                meteor1.dx = -meteor1.dx;
-                meteor1.dy = -meteor1.dy;
-            } else if (meteor2.rect.intersects(cat.rect)) {
-                meteor2.dx = -meteor2.dx;
-                meteor2.dy = -meteor2.dy;
-            } else if (meteor3.rect.intersects(cat.rect)){
-                meteor3.dx = -meteor3.dx;
-                meteor3.dy = -meteor3.dy;
-            } else if (meteor4.rect.intersects(cat.rect)) {
-                meteor4.dx = -meteor4.dx;
-                meteor4.dy = -meteor4.dy;
-            } else if (meteor5.rect.intersects(cat.rect)) {
-                meteor5.dx = -meteor5.dx;
-                meteor5.dy = -meteor5.dy;
+        for(int i = 0; i < meteorShower.length; ++i){
+            if (meteorShower[i].rect.intersects(cat.rect) && firstCrash == true) {
+                firstCrash = false;
+                cat.isAlive = false;
             }
+        }
+
             cat.dx = 0;
             cat.dy = 0;
-//            meteor1.height += 10;
-//            meteor1.width +=10;
-//            alien.health -=5;
 
-        }
+
+
         if(alien.rect.intersects(cat.rect) == false){
             firstCrash = true;
         }
@@ -229,21 +179,13 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.clearRect(0, 0, WIDTH, HEIGHT);
         g.drawImage(space,0,0,WIDTH,HEIGHT, null);
 
-        //draw the image
-//        if(astro.width < 1000) {
 
-//        g.setColor(new Color(250,0,0));
-//        g.fillRect(800,20,15,100);
-//        g.setColor(new Color(0,200,0));
-//        g.fillRect(800,20+(100-alien.health),15,alien.health);
 
 
         if(level1 == true) {
-            g.drawImage(metorImage, meteor1.xpos, meteor1.ypos, meteor1.width, meteor1.height, null);
-            g.drawImage(metorImage, meteor2.xpos, meteor2.ypos, meteor2.width, meteor2.height, null);
-            g.drawImage(metorImage, meteor3.xpos, meteor3.ypos, meteor3.width, meteor3.height, null);
-            g.drawImage(metorImage, meteor4.xpos, meteor4.ypos, meteor4.width, meteor4.height, null);
-            g.drawImage(metorImage, meteor5.xpos, meteor5.ypos, meteor5.width, meteor5.height, null);
+            for(int i = 0; i < meteorShower.length; ++i){
+                g.drawImage(meteorImage, meteorShower[i].xpos, meteorShower[i].ypos, meteorShower[i].width, meteorShower[i].height, null);;
+            }
             g.drawImage(portalImage, portal1.xpos, portal1.ypos, portal1.width, portal1.height, null);
             g.drawImage(portalImage, portal2.xpos, portal2.ypos, portal2.width, portal2.height, null);
             g.drawImage(alienImage, alien.xpos, alien.ypos, alien.width, alien.height, null);
@@ -261,11 +203,10 @@ public class BasicGameApp implements Runnable, KeyListener {
             level1 = false;
             level2 = true;
             g.clearRect(0, 0, WIDTH, HEIGHT);
-            meteor1 = null;
-            meteor2 = null;
-            meteor3 = null;
-            meteor4 = null;
-            meteor5 = null;
+            for(int i = 0; i < meteorShower.length; ++i){
+                meteorShower[i] = null;
+            }
+
             g.drawImage(alienImage,alien.xpos, alien.ypos, alien.width, alien.height,null);
             g.drawImage(catImage, cat.xpos, cat.ypos, cat.width, cat.height, null);
 
@@ -325,7 +266,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         pressingKey = true;
         //while(pressingKey){
         if(e.getKeyCode() == 38){
-            cat.dy = -10;
+            cat.dy = -5;
             cat.dx = 0;
             if(cat.isAlive == false){
                 cat.dy = 0;
