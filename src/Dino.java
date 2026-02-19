@@ -4,7 +4,7 @@ import java.awt.*;
  * Created by chales on 11/6/2017.
  * Edits by mblair on 10/27/2025
  */
-public class Alien {
+public class Dino {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
@@ -23,7 +23,7 @@ public class Alien {
 
     //This is a constructor that takes 3 parameters.
     // This allows us to specify the hero's name and position when we build it.
-    public Alien(String pName, int pXpos, int pYpos, double psuccess) {
+    public Dino(String pName, int pXpos, int pYpos, double psuccess) {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;

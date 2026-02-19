@@ -4,7 +4,7 @@ import java.awt.*;
  * Created by chales on 11/6/2017.
  * Edits by mblair on 10/27/2025
  */
-public class Cat {
+public class Trex {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
@@ -24,14 +24,14 @@ public class Cat {
 
     //This is a constructor that takes 3 parameters.
     // This allows us to specify the hero's name and position when we build it.
-    public Cat(String pName, int pXpos, int pYpos, double psucess) {
+    public Trex(String pName, int pXpos, int pYpos, double psucess) {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
         dx = 0;
         dy = 0;
-        width = 50;
-        height = 50;
+        width = 100;
+        height = 100;
         isAlive = true;
         rect = new Rectangle(xpos, ypos, width, height);
         sucessRate = psucess;

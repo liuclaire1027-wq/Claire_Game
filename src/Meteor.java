@@ -27,8 +27,8 @@ public class Meteor {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
-        dx = 5;
-        dy = 5;
+        dx = 2;
+        dy = 2;
         width = 100;
         height = 100;
         isAlive = true;

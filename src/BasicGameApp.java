@@ -35,14 +35,14 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public BufferStrategy bufferStrategy;
 
-    Alien alien;
-    Image alienImage;
-    Cat cat;
-    Image catImage;
+    Dino dino;
+    Image dinoImage;
+    Trex trex;
+    Image trexImage;
 
     Image meteorImage;
     Meteor[] meteorShower;
-    Image space = Toolkit.getDefaultToolkit().getImage("space.png");
+    Image forest = Toolkit.getDefaultToolkit().getImage("forest.jpg");
     Image boom = Toolkit.getDefaultToolkit().getImage("boom.png");
     Portal portal1;
     Portal portal2;
@@ -70,14 +70,14 @@ public class BasicGameApp implements Runnable, KeyListener {
         firstCrash = true;
         level1 = true;
         pressingKey = false;
-        alien = new Alien("alien.png", 600, 200, 0.75);
-        alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
-        cat = new Cat("cat.png", 300, 500, 0.25);
-        catImage = Toolkit.getDefaultToolkit().getImage("cat.png");
+        dino = new Dino("dino.png", 600, 200, 0.75);
+        dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
+        trex = new Trex("trex.png", 300, 500, 0.25);
+        trexImage = Toolkit.getDefaultToolkit().getImage("trex.png");
         portal1 = new Portal("portal.png", 700,600,0.5);
         portal2 = new Portal("portal.png", 100,100,0.5);
         meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
-        meteorShower = new Meteor[6];
+        meteorShower = new Meteor[4];
         for (int i = 0; i < meteorShower.length; i ++) {
             meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random()*WIDTH), (int) (Math.random()*HEIGHT), 0.5);
         }
@@ -110,65 +110,66 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public void moveThings() {
         if(pressingKey){
-            alien.move();
+            dino.move();
+            trex.move();
         }
         for(int i = 0; i < meteorShower.length; ++i){
             meteorShower[i].move();
         }
 
 
-        if(pressingKey){
-            for(int x = 0; x < 10; ++x) {
-                cat.move();
-            }
-        }
+//        if(pressingKey){
+//            for(int x = 0; x < 10; ++x) {
+//                trex.move();
+//            }
+        //}
 
-        alienmeteorcheckCrash();
-        aliencatcheckCrash();
-        portalcatcheckCrash();
-        portalaliencheckCrash();
+        dinometeorcheckCrash();
+        dinotrexcheckCrash();
+        portaltrexcheckCrash();
+        portaldinocheckCrash();
     }
-    public void portalcatcheckCrash(){
-        if (portal1.rect.intersects(cat.rect)){
+    public void portaltrexcheckCrash(){
+        if (portal1.rect.intersects(trex.rect)){
             portal1.isAlive = false;
-        }else if (portal2.rect.intersects(cat.rect)){
+        }else if (portal2.rect.intersects(trex.rect)){
             portal2.isAlive = false;
         }
     }
 
-    public void portalaliencheckCrash(){
-        if(portal2.rect.intersects(alien.rect)){
+    public void portaldinocheckCrash(){
+        if(portal2.rect.intersects(dino.rect)){
             portal2.isAlive = false;
-        } else if(portal1.rect.intersects(alien.rect)){
+        } else if(portal1.rect.intersects(dino.rect)){
             portal1.isAlive = false;
         }
     }
 
-    public void alienmeteorcheckCrash(){
+    public void dinometeorcheckCrash(){
         for(int i = 0 ; i<meteorShower.length; ++i){
-            if (meteorShower[i].rect.intersects(alien.rect) && firstCrash == true) {
+            if (meteorShower[i].rect.intersects(dino.rect) && firstCrash == true) {
                 firstCrash = false;
-                alien.isAlive = false;
-                alien.dx = 0;
-                alien.dy = 0;
+                dino.isAlive = false;
+                dino.dx = 0;
+                dino.dy = 0;
             }
         }
 
     }
-    public void aliencatcheckCrash(){
+    public void dinotrexcheckCrash(){
         for(int i = 0; i < meteorShower.length; ++i){
-            if (meteorShower[i].rect.intersects(cat.rect) && firstCrash == true) {
+            if (meteorShower[i].rect.intersects(trex.rect) && firstCrash == true) {
                 firstCrash = false;
-                cat.isAlive = false;
+                trex.isAlive = false;
             }
         }
 
-            cat.dx = 0;
-            cat.dy = 0;
+            trex.dx = 0;
+            trex.dy = 0;
 
 
 
-        if(alien.rect.intersects(cat.rect) == false){
+        if(dino.rect.intersects(trex.rect) == false){
             firstCrash = true;
         }
     }
@@ -177,7 +178,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage(space,0,0,WIDTH,HEIGHT, null);
+        g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
 
 
 
@@ -188,15 +189,15 @@ public class BasicGameApp implements Runnable, KeyListener {
             }
             g.drawImage(portalImage, portal1.xpos, portal1.ypos, portal1.width, portal1.height, null);
             g.drawImage(portalImage, portal2.xpos, portal2.ypos, portal2.width, portal2.height, null);
-            g.drawImage(alienImage, alien.xpos, alien.ypos, alien.width, alien.height, null);
-            g.drawImage(catImage, cat.xpos, cat.ypos, cat.width, cat.height, null);
+            g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
+            g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
         }
-        if(alien.isAlive == false){
-            alienImage = boom;
+        if(dino.isAlive == false){
+            dinoImage = boom;
         }
 
-        if(cat.isAlive == false){
-            catImage = boom;
+        if(trex.isAlive == false){
+            trexImage = boom;
         }
 
         if(portal1.isAlive == false && portal2.isAlive == false){
@@ -207,8 +208,8 @@ public class BasicGameApp implements Runnable, KeyListener {
                 meteorShower[i] = null;
             }
 
-            g.drawImage(alienImage,alien.xpos, alien.ypos, alien.width, alien.height,null);
-            g.drawImage(catImage, cat.xpos, cat.ypos, cat.width, cat.height, null);
+            g.drawImage(dinoImage,dino.xpos, dino.ypos, dino.width, dino.height,null);
+            g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
 
         }
 
@@ -266,67 +267,67 @@ public class BasicGameApp implements Runnable, KeyListener {
         pressingKey = true;
         //while(pressingKey){
         if(e.getKeyCode() == 38){
-            cat.dy = -5;
-            cat.dx = 0;
-            if(cat.isAlive == false){
-                cat.dy = 0;
-                cat.dx = 0;
+            trex.dy = -5;
+            trex.dx = 0;
+            if(trex.isAlive == false){
+                trex.dy = 0;
+                trex.dx = 0;
             }
         } else if (e.getKeyCode() == 37) {
-            cat.dx = -10;
-            cat.dy = 0;
-            if(cat.isAlive == false){
-                cat.dy = 0;
-                cat.dx = 0;
+            trex.dx = -10;
+            trex.dy = 0;
+            if(trex.isAlive == false){
+                trex.dy = 0;
+                trex.dx = 0;
             }
         } else if(e.getKeyCode() == 39){
-            cat.dx = 10;
-            cat.dy = 0;
-            if(cat.isAlive == false){
-                cat.dy = 0;
-                cat.dx = 0;
+            trex.dx = 10;
+            trex.dy = 0;
+            if(trex.isAlive == false){
+                trex.dy = 0;
+                trex.dx = 0;
             }
         } else if(e.getKeyCode() == 40){
-            cat.dy = 10;
-            cat.dx = 0;
-            if(cat.isAlive == false){
-                cat.dy = 0;
-                cat.dx = 0;
+            trex.dy = 10;
+            trex.dx = 0;
+            if(trex.isAlive == false){
+                trex.dy = 0;
+                trex.dx = 0;
             }
         } else if(e.getKeyCode() == 87){
-           alien.dy = -10;
-           alien.dx = 0;
-           if(alien.isAlive == false){
-               alien.dy = 0;
-               alien.dx = 0;
+           dino.dy = -10;
+           dino.dx = 0;
+           if(dino.isAlive == false){
+               dino.dy = 0;
+               dino.dx = 0;
            }
         } else if(e.getKeyCode() == 65){
-            alien.dx = -10;
-            alien.dy = 0;
-            if(alien.isAlive == false){
-                alien.dy = 0;
-                alien.dx = 0;
+            dino.dx = -10;
+            dino.dy = 0;
+            if(dino.isAlive == false){
+                dino.dy = 0;
+                dino.dx = 0;
             }
         } else if(e.getKeyCode() == 68){
-            alien.dx = 10;
-            alien.dy = 0;
-            if(alien.isAlive == false){
-                alien.dy = 0;
-                alien.dx = 0;
+            dino.dx = 10;
+            dino.dy = 0;
+            if(dino.isAlive == false){
+                dino.dy = 0;
+                dino.dx = 0;
             }
         } else if (e.getKeyCode() == 83){
-            alien.dy = 10;
-            alien.dx = 0;
-            if(alien.isAlive == false){
-                alien.dy = 0;
-                alien.dx = 0;
+            dino.dy = 10;
+            dino.dx = 0;
+            if(dino.isAlive == false){
+                dino.dy = 0;
+                dino.dx = 0;
             }
 
         }
 
 
-        cat.rect = new Rectangle(cat.xpos, cat.ypos, cat.width, cat.height);
-        alien.rect = new Rectangle(alien.xpos, alien.ypos, alien.width, alien.height);
+        trex.rect = new Rectangle(trex.xpos, trex.ypos, trex.width, trex.height);
+        dino.rect = new Rectangle(dino.xpos, dino.ypos, dino.width, dino.height);
 
     }
 
@@ -334,35 +335,35 @@ public class BasicGameApp implements Runnable, KeyListener {
     public void keyReleased(KeyEvent e) {
         pressingKey = false;
         if(e.getKeyCode() == 38){
-            cat.dy = 0;
-            cat.dx = 0;
+            trex.dy = 0;
+            trex.dx = 0;
         } else if (e.getKeyCode() == 37) {
-            cat.dx = 0;
-            cat.dy = 0;
+            trex.dx = 0;
+            trex.dy = 0;
         } else if(e.getKeyCode() == 39){
-            cat.dx = 0;
-            cat.dy = 0;
+            trex.dx = 0;
+            trex.dy = 0;
         } else if(e.getKeyCode() == 40){
-            cat.dy = 0;
-            cat.dx = 0;
+            trex.dy = 0;
+            trex.dx = 0;
         } else if(e.getKeyCode() == 87){
-            alien.dy = 0;
-            alien.dx = 0;
+            dino.dy = 0;
+            dino.dx = 0;
         } else if(e.getKeyCode() == 65){
-            alien.dx = 0;
-            alien.dy = 0;
+            dino.dx = 0;
+            dino.dy = 0;
         } else if(e.getKeyCode() == 68){
-            alien.dx = 0;
-            alien.dy = 0;
+            dino.dx = 0;
+            dino.dy = 0;
         } else if (e.getKeyCode() == 83){
-            alien.dy = 0;
-            alien.dx = 0;
+            dino.dy = 0;
+            dino.dx = 0;
 
         }
 
 
-        cat.rect = new Rectangle(cat.xpos, cat.ypos, cat.width, cat.height);
-        alien.rect = new Rectangle(alien.xpos, alien.ypos, alien.width, alien.height);
+        trex.rect = new Rectangle(trex.xpos, trex.ypos, trex.width, trex.height);
+        dino.rect = new Rectangle(dino.xpos, dino.ypos, dino.width, dino.height);
 
 
     }
