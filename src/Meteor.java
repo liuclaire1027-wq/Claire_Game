@@ -23,41 +23,44 @@ public class Meteor {
 
     //This is a constructor that takes 3 parameters.
     // This allows us to specify the hero's name and position when we build it.
-    public Meteor(String pName, int pXpos, int pYpos, double psuccess) {
+    public Meteor(String pName, int pXpos, int pYpos) {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
         dx = 2;
-        dy = 2;
+        dy = (int)(Math.random()*10);
         width = 100;
         height = 100;
         isAlive = true;
         rect = new Rectangle(xpos, ypos, width, height);
-        successRate = psuccess;
+
         health = 100;
  
     }
 
 
     public void move() {
-        xpos = xpos + dx;
+        //xpos = xpos + dx;
         ypos = ypos + dy;
         rect = new Rectangle(xpos, ypos, width, height);
+        if(ypos >= 700){
+            ypos = 0;
+        }
 
-        if(xpos > 1000 -width){
-            dx = -dx;
-            xpos +=dx;
-        }
-        else if (xpos < width){
-            dx=-dx;
-        }
-        if(ypos > 700 - height){
-            dy=-dy;
-            ypos += dy;
-        }
-        else if(ypos < height) {
-            dy = -dy;
-        }
+//        if(xpos > 1000 -width){
+//            dx = -dx;
+//            xpos +=dx;
+//        }
+//        else if (xpos < width){
+//            dx=-dx;
+//        }
+//        if(ypos > 700 - height){
+//            dy=-dy;
+//            ypos += dy;
+//        }
+//        else if(ypos < height) {
+//            dy = -dy;
+//        }
     }
 
 

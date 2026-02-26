@@ -24,7 +24,7 @@ public class Trex {
 
     //This is a constructor that takes 3 parameters.
     // This allows us to specify the hero's name and position when we build it.
-    public Trex(String pName, int pXpos, int pYpos, double psucess) {
+    public Trex(String pName, int pXpos, int pYpos) {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
@@ -34,7 +34,7 @@ public class Trex {
         height = 100;
         isAlive = true;
         rect = new Rectangle(xpos, ypos, width, height);
-        sucessRate = psucess;
+
         health = 100;
 
 

@@ -39,6 +39,10 @@ public class BasicGameApp implements Runnable, KeyListener {
     Image dinoImage;
     Trex trex;
     Image trexImage;
+    Alien[] aliens;
+    Image alienImage;
+    Fern[] ferns;
+    Image fernImage;
 
     Image meteorImage;
     Meteor[] meteorShower;
@@ -69,24 +73,36 @@ public class BasicGameApp implements Runnable, KeyListener {
         setUpGraphics();
         firstCrash = true;
         level1 = true;
+        level2 = false;
         pressingKey = false;
-        dino = new Dino("dino.png", 600, 200, 0.75);
+        dino = new Dino("dino.png", 600, 500);
         dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
-        trex = new Trex("trex.png", 300, 500, 0.25);
+        trex = new Trex("trex.png", 300, 500);
         trexImage = Toolkit.getDefaultToolkit().getImage("trex.png");
-        portal1 = new Portal("portal.png", 700,600,0.5);
-        portal2 = new Portal("portal.png", 100,100,0.5);
+        portal1 = new Portal("portal.png", 700,600);
+        portal2 = new Portal("portal.png", 100,100);
         meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
-        meteorShower = new Meteor[4];
+        meteorShower = new Meteor[6];
         for (int i = 0; i < meteorShower.length; i ++) {
-            meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random()*WIDTH), (int) (Math.random()*HEIGHT), 0.5);
+            meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random()*WIDTH) + 100, (int)(Math.random()*100));
+
         }
-
+        alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
+        aliens = new Alien[10];
+        for(int i = 0; i <aliens.length; i++){
+            aliens[i] = new Alien("aliens" + i, (int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100);
+        }
+        fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
+        ferns = new Fern[12];
+        for (int i = 0; i < ferns.length; i++){
+            ferns[i] = new Fern("ferns" + i,(int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100 );
+            if(ferns[i].xpos  == aliens[i].xpos && ferns[i].ypos == aliens[i].ypos ){
+                ferns[i].xpos += 20;
+                ferns[i].ypos += 20;
+            }
+        }
         portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
-
-
         run();
-
 
     } // end BasicGameApp constructor
 
@@ -117,12 +133,6 @@ public class BasicGameApp implements Runnable, KeyListener {
             meteorShower[i].move();
         }
 
-
-//        if(pressingKey){
-//            for(int x = 0; x < 10; ++x) {
-//                trex.move();
-//            }
-        //}
 
         dinometeorcheckCrash();
         dinotrexcheckCrash();
@@ -163,14 +173,11 @@ public class BasicGameApp implements Runnable, KeyListener {
                 trex.isAlive = false;
             }
         }
-
             trex.dx = 0;
             trex.dy = 0;
 
-
-
-        if(dino.rect.intersects(trex.rect) == false){
-            firstCrash = true;
+            if(dino.rect.intersects(trex.rect) == false){
+                firstCrash = true;
         }
     }
 
@@ -179,9 +186,6 @@ public class BasicGameApp implements Runnable, KeyListener {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
         g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
-
-
-
 
         if(level1 == true) {
             for(int i = 0; i < meteorShower.length; ++i){
@@ -192,6 +196,8 @@ public class BasicGameApp implements Runnable, KeyListener {
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
         }
+
+
         if(dino.isAlive == false){
             dinoImage = boom;
         }
@@ -209,6 +215,17 @@ public class BasicGameApp implements Runnable, KeyListener {
             }
 
             g.drawImage(dinoImage,dino.xpos, dino.ypos, dino.width, dino.height,null);
+            g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
+
+        }
+        if(level2 == true){
+            for(int i = 0; i < aliens.length; ++i){
+                g.drawImage(alienImage, aliens[i].xpos, aliens[i]. ypos, aliens[i].width, aliens[i].height, null);
+            }
+            for(int i = 0; i < ferns.length; ++i){
+                g.drawImage(fernImage, ferns[i]. xpos, ferns[i].ypos, ferns[i].width, ferns[i].height, null);
+            }
+            g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
 
         }
@@ -360,8 +377,6 @@ public class BasicGameApp implements Runnable, KeyListener {
             dino.dx = 0;
 
         }
-
-
         trex.rect = new Rectangle(trex.xpos, trex.ypos, trex.width, trex.height);
         dino.rect = new Rectangle(dino.xpos, dino.ypos, dino.width, dino.height);
 
