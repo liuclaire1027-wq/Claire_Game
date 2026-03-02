@@ -53,6 +53,8 @@ public class BasicGameApp implements Runnable, KeyListener {
     Image portalImage;
     boolean level1;
     boolean level2;
+    boolean collision = true;
+    boolean level3;
 
     public boolean firstCrash;
     public boolean pressingKey;
@@ -93,14 +95,30 @@ public class BasicGameApp implements Runnable, KeyListener {
             aliens[i] = new Alien("aliens" + i, (int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100);
         }
         fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
-        ferns = new Fern[12];
-        for (int i = 0; i < ferns.length; i++){
-            ferns[i] = new Fern("ferns" + i,(int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100 );
-            if(ferns[i].xpos  == aliens[i].xpos && ferns[i].ypos == aliens[i].ypos ){
-                ferns[i].xpos += 20;
-                ferns[i].ypos += 20;
+        while(collision == true){
+            ferns = new Fern[12];
+            for (int i = 0; i < ferns.length; i++) {
+                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
             }
+            collision = false;
+            for(int x = 0; x < aliens.length; ++x){
+                for(int j = 0; j < ferns.length; ++j){
+                    if(ferns[j].xpos == aliens[x].xpos && ferns[j].ypos == aliens[x].ypos){
+                        collision = true;
+                    }
+                }
+            }
+
+
         }
+//        ferns = new Fern[12];
+//        for (int i = 0; i < ferns.length; i++){
+//            ferns[i] = new Fern("ferns" + i,(int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100 );
+//            if(ferns[i].xpos  == aliens[i].xpos && ferns[i].ypos == aliens[i].ypos ){
+//                ferns[i].xpos += 20;
+//                ferns[i].ypos += 20;
+//            }
+//        }
         portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
         run();
 
@@ -138,6 +156,8 @@ public class BasicGameApp implements Runnable, KeyListener {
         dinotrexcheckCrash();
         portaltrexcheckCrash();
         portaldinocheckCrash();
+        dinoferncheckCrash();
+        trexferncheckCrash();
     }
     public void portaltrexcheckCrash(){
         if (portal1.rect.intersects(trex.rect)){
@@ -180,14 +200,33 @@ public class BasicGameApp implements Runnable, KeyListener {
                 firstCrash = true;
         }
     }
+    int ferncounter = 0;
+    public void dinoferncheckCrash(){
+        for(int i = 0; i < ferns.length; ++i){
+            if(ferns[i].rect.intersects(dino.rect) && firstCrash == true){
+                firstCrash = false;
+                ferncounter += 1;
+            }
+        }
+    }
+
+    public void trexferncheckCrash(){
+        for(int i = 0; i < ferns.length; ++i){
+            if(ferns[i].rect.intersects(trex.rect) && firstCrash == true){
+                firstCrash = false;
+                ferncounter += 1;
+            }
+        }
+    }
 
     //Paints things on the screen using bufferStrategy
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
+        //g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
 
         if(level1 == true) {
+            g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
             for(int i = 0; i < meteorShower.length; ++i){
                 g.drawImage(meteorImage, meteorShower[i].xpos, meteorShower[i].ypos, meteorShower[i].width, meteorShower[i].height, null);;
             }
@@ -228,6 +267,15 @@ public class BasicGameApp implements Runnable, KeyListener {
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
 
+        }
+        if(ferncounter == ferns.length){
+            level1 = false;
+            level2 = false;
+            level3 = true;
+            g.clearRect(0, 0, WIDTH, HEIGHT);
+            for(int i = 0; i < ferns.length; ++i){
+                ferns[i] = null;
+            }
         }
 
         g.dispose();
