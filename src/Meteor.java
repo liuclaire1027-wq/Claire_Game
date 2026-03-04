@@ -28,7 +28,7 @@ public class Meteor {
         xpos = pXpos;
         ypos = pYpos;
         dx = 2;
-        dy = (int)(Math.random()*10);
+        dy = (int)(Math.random()*10)+1;
         width = 100;
         height = 100;
         isAlive = true;

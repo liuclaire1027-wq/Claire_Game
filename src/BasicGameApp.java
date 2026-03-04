@@ -56,7 +56,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean collision = true;
     boolean level3;
 
-    public boolean firstCrash;
+    //public boolean firstCrash;
     public boolean pressingKey;
 
 
@@ -73,13 +73,13 @@ public class BasicGameApp implements Runnable, KeyListener {
     public BasicGameApp() { // BasicGameApp constructor
 
         setUpGraphics();
-        firstCrash = true;
+        //firstCrash = true;
         level1 = true;
         level2 = false;
         pressingKey = false;
-        dino = new Dino("dino.png", 600, 500);
+        dino = new Dino("dino.png", 300, 500);
         dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
-        trex = new Trex("trex.png", 300, 500);
+        trex = new Trex("trex.png", 600, 500);
         trexImage = Toolkit.getDefaultToolkit().getImage("trex.png");
         portal1 = new Portal("portal.png", 700,600);
         portal2 = new Portal("portal.png", 100,100);
@@ -111,14 +111,6 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 
         }
-//        ferns = new Fern[12];
-//        for (int i = 0; i < ferns.length; i++){
-//            ferns[i] = new Fern("ferns" + i,(int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100 );
-//            if(ferns[i].xpos  == aliens[i].xpos && ferns[i].ypos == aliens[i].ypos ){
-//                ferns[i].xpos += 20;
-//                ferns[i].ypos += 20;
-//            }
-//        }
         portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
         run();
 
@@ -153,7 +145,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 
         dinometeorcheckCrash();
-        dinotrexcheckCrash();
+        meteortrexcheckCrash();
         portaltrexcheckCrash();
         portaldinocheckCrash();
         dinoferncheckCrash();
@@ -177,8 +169,8 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public void dinometeorcheckCrash(){
         for(int i = 0 ; i<meteorShower.length; ++i){
-            if (meteorShower[i].rect.intersects(dino.rect) && firstCrash == true) {
-                firstCrash = false;
+            if (meteorShower[i].rect.intersects(dino.rect)) {
+                //firstCrash = false;
                 dino.isAlive = false;
                 dino.dx = 0;
                 dino.dy = 0;
@@ -186,25 +178,25 @@ public class BasicGameApp implements Runnable, KeyListener {
         }
 
     }
-    public void dinotrexcheckCrash(){
+    public void meteortrexcheckCrash(){
         for(int i = 0; i < meteorShower.length; ++i){
-            if (meteorShower[i].rect.intersects(trex.rect) && firstCrash == true) {
-                firstCrash = false;
+            if (meteorShower[i].rect.intersects(trex.rect)) {
+                //firstCrash = false;
                 trex.isAlive = false;
             }
         }
             trex.dx = 0;
             trex.dy = 0;
 
-            if(dino.rect.intersects(trex.rect) == false){
-                firstCrash = true;
-        }
+//            if(dino.rect.intersects(trex.rect) == false){
+//                firstCrash = true;
+//        }
     }
     int ferncounter = 0;
     public void dinoferncheckCrash(){
         for(int i = 0; i < ferns.length; ++i){
-            if(ferns[i].rect.intersects(dino.rect) && firstCrash == true){
-                firstCrash = false;
+            if(ferns[i].rect.intersects(dino.rect)){
+                //firstCrash = false;
                 ferncounter += 1;
             }
         }
@@ -212,8 +204,8 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public void trexferncheckCrash(){
         for(int i = 0; i < ferns.length; ++i){
-            if(ferns[i].rect.intersects(trex.rect) && firstCrash == true){
-                firstCrash = false;
+            if(ferns[i].rect.intersects(trex.rect)){
+                //firstCrash = false;
                 ferncounter += 1;
             }
         }
@@ -245,38 +237,35 @@ public class BasicGameApp implements Runnable, KeyListener {
             trexImage = boom;
         }
 
-        if(portal1.isAlive == false && portal2.isAlive == false){
+        if(portal1.isAlive == false && portal2.isAlive == false) {
             level1 = false;
             level2 = true;
             g.clearRect(0, 0, WIDTH, HEIGHT);
-            for(int i = 0; i < meteorShower.length; ++i){
+            for (int i = 0; i < meteorShower.length; ++i) {
                 meteorShower[i] = null;
             }
 
-            g.drawImage(dinoImage,dino.xpos, dino.ypos, dino.width, dino.height,null);
-            g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
-
-        }
-        if(level2 == true){
-            for(int i = 0; i < aliens.length; ++i){
-                g.drawImage(alienImage, aliens[i].xpos, aliens[i]. ypos, aliens[i].width, aliens[i].height, null);
-            }
-            for(int i = 0; i < ferns.length; ++i){
-                g.drawImage(fernImage, ferns[i]. xpos, ferns[i].ypos, ferns[i].width, ferns[i].height, null);
-            }
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
 
-        }
-        if(ferncounter == ferns.length){
-            level1 = false;
-            level2 = false;
-            level3 = true;
-            g.clearRect(0, 0, WIDTH, HEIGHT);
-            for(int i = 0; i < ferns.length; ++i){
-                ferns[i] = null;
+
+            for (int i = 0; i < aliens.length; ++i) {
+                g.drawImage(alienImage, aliens[i].xpos, aliens[i].ypos, aliens[i].width, aliens[i].height, null);
+            }
+            for (int i = 0; i < ferns.length; ++i) {
+                g.drawImage(fernImage, ferns[i].xpos, ferns[i].ypos, ferns[i].width, ferns[i].height, null);
             }
         }
+
+//        if(ferncounter == ferns.length){
+//            level1 = false;
+//            level2 = false;
+//            level3 = true;
+//            g.clearRect(0, 0, WIDTH, HEIGHT);
+//            for(int i = 0; i < ferns.length; ++i){
+//                ferns[i] = null;
+//            }
+//        }
 
         g.dispose();
         bufferStrategy.show();
@@ -333,56 +322,56 @@ public class BasicGameApp implements Runnable, KeyListener {
         //while(pressingKey){
         if(e.getKeyCode() == 38){
             trex.dy = -5;
-            trex.dx = 0;
+
             if(trex.isAlive == false){
                 trex.dy = 0;
                 trex.dx = 0;
             }
         } else if (e.getKeyCode() == 37) {
             trex.dx = -10;
-            trex.dy = 0;
+
             if(trex.isAlive == false){
                 trex.dy = 0;
                 trex.dx = 0;
             }
         } else if(e.getKeyCode() == 39){
             trex.dx = 10;
-            trex.dy = 0;
+
             if(trex.isAlive == false){
                 trex.dy = 0;
                 trex.dx = 0;
             }
         } else if(e.getKeyCode() == 40){
             trex.dy = 10;
-            trex.dx = 0;
+
             if(trex.isAlive == false){
                 trex.dy = 0;
                 trex.dx = 0;
             }
         } else if(e.getKeyCode() == 87){
            dino.dy = -10;
-           dino.dx = 0;
+
            if(dino.isAlive == false){
                dino.dy = 0;
                dino.dx = 0;
            }
         } else if(e.getKeyCode() == 65){
             dino.dx = -10;
-            dino.dy = 0;
+
             if(dino.isAlive == false){
                 dino.dy = 0;
                 dino.dx = 0;
             }
         } else if(e.getKeyCode() == 68){
             dino.dx = 10;
-            dino.dy = 0;
+
             if(dino.isAlive == false){
                 dino.dy = 0;
                 dino.dx = 0;
             }
         } else if (e.getKeyCode() == 83){
             dino.dy = 10;
-            dino.dx = 0;
+
             if(dino.isAlive == false){
                 dino.dy = 0;
                 dino.dx = 0;
