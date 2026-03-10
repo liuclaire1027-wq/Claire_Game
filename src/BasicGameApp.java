@@ -77,6 +77,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         level1 = true;
         level2 = false;
         pressingKey = false;
+
         dino = new Dino("dino.png", 300, 500);
         dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
         trex = new Trex("trex.png", 600, 500);
@@ -84,7 +85,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         portal1 = new Portal("portal.png", 700,600);
         portal2 = new Portal("portal.png", 100,100);
         meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
-        meteorShower = new Meteor[6];
+        meteorShower = new Meteor[4];
         for (int i = 0; i < meteorShower.length; i ++) {
             meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random()*WIDTH) + 100, (int)(Math.random()*100));
 
@@ -98,7 +99,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         while(collision == true){
             ferns = new Fern[12];
             for (int i = 0; i < ferns.length; i++) {
-                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
+                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
             }
             collision = false;
             for(int x = 0; x < aliens.length; ++x){
@@ -111,6 +112,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 
         }
+        //System.out.println(ferns);
         portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
         run();
 
@@ -150,6 +152,8 @@ public class BasicGameApp implements Runnable, KeyListener {
         portaldinocheckCrash();
         dinoferncheckCrash();
         trexferncheckCrash();
+        aliendinocheckCrash();
+        alientrexcheckCrash();
     }
     public void portaltrexcheckCrash(){
         if (portal1.rect.intersects(trex.rect)){
@@ -166,6 +170,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             portal1.isAlive = false;
         }
     }
+
 
     public void dinometeorcheckCrash(){
         for(int i = 0 ; i<meteorShower.length; ++i){
@@ -188,9 +193,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             trex.dx = 0;
             trex.dy = 0;
 
-//            if(dino.rect.intersects(trex.rect) == false){
-//                firstCrash = true;
-//        }
+
     }
     int ferncounter = 0;
     public void dinoferncheckCrash(){
@@ -210,6 +213,24 @@ public class BasicGameApp implements Runnable, KeyListener {
             }
         }
     }
+
+    public void alientrexcheckCrash(){
+        for(int i = 0; i < aliens.length; ++ i){
+            if(aliens[i].rect.intersects(trex.rect)){
+                trex.isAlive = false;
+            }
+        }
+    }
+
+    public void aliendinocheckCrash(){
+        for(int i = 0; i < aliens.length; ++ i){
+            if(aliens[i].rect.intersects(dino.rect)){
+                dino.isAlive = false;
+            }
+        }
+    }
+
+
 
     //Paints things on the screen using bufferStrategy
     private void render() {
@@ -240,6 +261,8 @@ public class BasicGameApp implements Runnable, KeyListener {
         if(portal1.isAlive == false && portal2.isAlive == false) {
             level1 = false;
             level2 = true;
+        }
+        if(level2 == true){
             g.clearRect(0, 0, WIDTH, HEIGHT);
             for (int i = 0; i < meteorShower.length; ++i) {
                 meteorShower[i] = null;
@@ -247,7 +270,6 @@ public class BasicGameApp implements Runnable, KeyListener {
 
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
-
 
             for (int i = 0; i < aliens.length; ++i) {
                 g.drawImage(alienImage, aliens[i].xpos, aliens[i].ypos, aliens[i].width, aliens[i].height, null);
@@ -317,7 +339,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
+        //System.out.println(e.getKeyCode());
         pressingKey = true;
         //while(pressingKey){
         if(e.getKeyCode() == 38){
