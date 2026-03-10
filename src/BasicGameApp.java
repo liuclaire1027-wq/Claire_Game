@@ -77,43 +77,48 @@ public class BasicGameApp implements Runnable, KeyListener {
         level1 = true;
         level2 = false;
         pressingKey = false;
-
         dino = new Dino("dino.png", 300, 500);
         dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
         trex = new Trex("trex.png", 600, 500);
         trexImage = Toolkit.getDefaultToolkit().getImage("trex.png");
-        portal1 = new Portal("portal.png", 700,600);
-        portal2 = new Portal("portal.png", 100,100);
-        meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
-        meteorShower = new Meteor[4];
-        for (int i = 0; i < meteorShower.length; i ++) {
-            meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random()*WIDTH) + 100, (int)(Math.random()*100));
+        if(level1 == true) {
+            portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
+            portal1 = new Portal("portal.png", 700, 600);
+            portal2 = new Portal("portal.png", 100, 100);
+            meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
+            meteorShower = new Meteor[4];
+            for (int i = 0; i < meteorShower.length; i++) {
+                meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * 100));
 
-        }
-        alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
-        aliens = new Alien[10];
-        for(int i = 0; i <aliens.length; i++){
-            aliens[i] = new Alien("aliens" + i, (int)(Math.random() * WIDTH) + 100, (int)(Math.random()* HEIGHT) + 100);
-        }
-        fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
-        while(collision == true){
-            ferns = new Fern[12];
-            for (int i = 0; i < ferns.length; i++) {
-                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
             }
-            collision = false;
-            for(int x = 0; x < aliens.length; ++x){
-                for(int j = 0; j < ferns.length; ++j){
-                    if(ferns[j].xpos == aliens[x].xpos && ferns[j].ypos == aliens[x].ypos){
-                        collision = true;
+        }
+        if(level2 == true) {
+            alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
+            aliens = new Alien[10];
+            for (int i = 0; i < aliens.length; i++) {
+                aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
+            }
+            fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
+            while (collision == true) {
+                ferns = new Fern[12];
+                for (int i = 0; i < ferns.length; i++) {
+                    ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
+                }
+                collision = false;
+                for (int x = 0; x < aliens.length; ++x) {
+                    for (int j = 0; j < ferns.length; ++j) {
+                        if (ferns[j].xpos == aliens[x].xpos && ferns[j].ypos == aliens[x].ypos) {
+                            collision = true;
+                        }
                     }
                 }
-            }
 
+
+            }
 
         }
         //System.out.println(ferns);
-        portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
+
         run();
 
     } // end BasicGameApp constructor
@@ -141,19 +146,26 @@ public class BasicGameApp implements Runnable, KeyListener {
             dino.move();
             trex.move();
         }
-        for(int i = 0; i < meteorShower.length; ++i){
-            meteorShower[i].move();
+        if(level1 == true) {
+            for (int i = 0; i < meteorShower.length; ++i) {
+                meteorShower[i].move();
+            }
+            dinometeorcheckCrash();
+            meteortrexcheckCrash();
+            portaltrexcheckCrash();
+            portaldinocheckCrash();
+
+        }
+        if(level2 == true){
+            dinoferncheckCrash();
+            trexferncheckCrash();
+            aliendinocheckCrash();
+            alientrexcheckCrash();
         }
 
 
-        dinometeorcheckCrash();
-        meteortrexcheckCrash();
-        portaltrexcheckCrash();
-        portaldinocheckCrash();
-        dinoferncheckCrash();
-        trexferncheckCrash();
-        aliendinocheckCrash();
-        alientrexcheckCrash();
+
+
     }
     public void portaltrexcheckCrash(){
         if (portal1.rect.intersects(trex.rect)){
