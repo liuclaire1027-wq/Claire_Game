@@ -48,6 +48,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     Meteor[] meteorShower;
     Image forest = Toolkit.getDefaultToolkit().getImage("forest.jpg");
     Image boom = Toolkit.getDefaultToolkit().getImage("boom.png");
+    Image space = Toolkit.getDefaultToolkit().getImage("space.png");
     Portal portal1;
     Portal portal2;
     Image portalImage;
@@ -55,6 +56,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean level2;
     boolean collision = true;
     boolean level3;
+    boolean gameOver;
 
     //public boolean firstCrash;
     public boolean pressingKey;
@@ -76,12 +78,13 @@ public class BasicGameApp implements Runnable, KeyListener {
         //firstCrash = true;
         level1 = true;
         level2 = false;
+        gameOver = false;
         pressingKey = false;
         dino = new Dino("dino.png", 300, 500);
         dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
         trex = new Trex("trex.png", 600, 500);
         trexImage = Toolkit.getDefaultToolkit().getImage("trex.png");
-        if(level1 == true) {
+        if(level1 == true && gameOver == false) {
             portalImage = Toolkit.getDefaultToolkit().getImage("portal.png");
             portal1 = new Portal("portal.png", 700, 600);
             portal2 = new Portal("portal.png", 100, 100);
@@ -92,31 +95,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
             }
         }
-        if(level2 == true) {
-            alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
-            aliens = new Alien[10];
-            for (int i = 0; i < aliens.length; i++) {
-                aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
-            }
-            fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
-            while (collision == true) {
-                ferns = new Fern[12];
-                for (int i = 0; i < ferns.length; i++) {
-                    ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
-                }
-                collision = false;
-                for (int x = 0; x < aliens.length; ++x) {
-                    for (int j = 0; j < ferns.length; ++j) {
-                        if (ferns[j].xpos == aliens[x].xpos && ferns[j].ypos == aliens[x].ypos) {
-                            collision = true;
-                        }
-                    }
-                }
 
-
-            }
-
-        }
         //System.out.println(ferns);
 
         run();
@@ -249,6 +228,14 @@ public class BasicGameApp implements Runnable, KeyListener {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
         //g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
+        if(gameOver == true){
+            g.clearRect(0, 0, WIDTH, HEIGHT);
+            //how to make everything null
+
+
+
+
+        }
 
         if(level1 == true) {
             g.drawImage(forest,0,0,WIDTH,HEIGHT, null);
@@ -270,6 +257,12 @@ public class BasicGameApp implements Runnable, KeyListener {
             trexImage = boom;
         }
 
+        if(dino.isAlive == false && trex.isAlive == false){
+            gameOver = true;
+            level1 = false;
+        }
+
+
         if(portal1.isAlive == false && portal2.isAlive == false) {
             level1 = false;
             level2 = true;
@@ -279,10 +272,32 @@ public class BasicGameApp implements Runnable, KeyListener {
             for (int i = 0; i < meteorShower.length; ++i) {
                 meteorShower[i] = null;
             }
+            g.drawImage(space,0,0,WIDTH,HEIGHT, null);
 
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
+            alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
+            aliens = new Alien[7];
+            for (int i = 0; i < aliens.length; i++) {
+                aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
+            }
+            fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
+            while (collision == true) {
+                ferns = new Fern[12];
+                for (int i = 0; i < ferns.length; i++) {
+                    ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
+                }
+                collision = false;
+                for (int x = 0; x < aliens.length; ++x) {
+                    for (int j = 0; j < ferns.length; ++j) {
+                        if (ferns[j].xpos == aliens[x].xpos && ferns[j].ypos == aliens[x].ypos) {
+                            collision = true;
+                        }
+                    }
+                }
 
+
+            }
             for (int i = 0; i < aliens.length; ++i) {
                 g.drawImage(alienImage, aliens[i].xpos, aliens[i].ypos, aliens[i].width, aliens[i].height, null);
             }
