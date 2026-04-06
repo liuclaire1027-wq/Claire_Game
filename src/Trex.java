@@ -33,7 +33,7 @@ public class Trex {
         width = 100;
         height = 100;
         isAlive = true;
-        rect = new Rectangle(xpos, ypos, width, height);
+        rect = new Rectangle(xpos, ypos, width-80, height-80);
 
         health = 100;
 
