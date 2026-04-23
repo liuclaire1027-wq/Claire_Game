@@ -182,17 +182,18 @@ public class BasicGameApp implements Runnable, KeyListener {
             if (meteorShower[i].rect.intersects(trex.rect)) {
                 //firstCrash = false;
                 trex.isAlive = false;
+                trex.dx = 0;
+                trex.dy = 0;
             }
         }
-            trex.dx = 0;
-            trex.dy = 0;
+
 
 
     }
     int ferncounter = 0;
     public void dinoferncheckCrash(){
         for(int i = 0; i < ferns.length; ++i){
-            if(ferns[i].rect.intersects(dino.rect)){
+            if(ferns[i]!= null && ferns[i].rect.intersects(dino.rect)){
                 //firstCrash = false;
                 ferncounter += 1;
                 ferns[i] = null;
@@ -203,7 +204,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public void trexferncheckCrash(){
         for(int i = 0; i < ferns.length; ++i){
-            if(ferns[i].rect.intersects(trex.rect)){
+            if(ferns[i] != null && ferns[i].rect.intersects(trex.rect)){
                 //firstCrash = false;
                 ferncounter += 1;
                 ferns[i] = null;
@@ -278,11 +279,24 @@ public class BasicGameApp implements Runnable, KeyListener {
         if(portal1.isAlive == false && portal2.isAlive == false) {
             level1 = false;
 
-//            alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
-//            aliens = new Alien[7];
-//            for (int i = 0; i < aliens.length; i++) {
-//                aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
-//            }
+           alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
+            while(collision2 == true){
+                aliens = new Alien[8];
+                for(int i = 0; i <aliens.length; i++){
+                    aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
+                }
+                collision2 = false;
+                for(int x = 0; x <aliens.length; ++x){
+                    if(aliens[x].rect.intersects(trex.rect) || aliens[x].rect.intersects(dino.rect)){
+                        collision2 = true;
+                    }
+                }
+            }
+            fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
+            ferns = new Fern[5];
+            for(int i = 0; i < ferns.length; ++i) {
+                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
+            }
             portal1.isAlive = true;
             portal2.isAlive = true;
             level2 = true;
@@ -298,40 +312,16 @@ public class BasicGameApp implements Runnable, KeyListener {
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
 
-            fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
-            while (collision == true) {
-                ferns = new Fern[5];
-                for (int i = 0; i < ferns.length; i++) {
-                    ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
-                }
-                collision = false;
-                for (int x = 0; x < aliens.length; ++x) {
-                    for (int j = 0; j < ferns.length; ++j) {
-                        if (ferns[j].rect.intersects(aliens[x].rect)||ferns[j].rect.intersects(dino.rect)||ferns[j].rect.intersects(trex.rect)) {
-                            collision = true;
-                        }
-                    }
-                }
-            }
-            alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
-            while(collision2 == true){
-                aliens = new Alien[8];
-                for(int i = 0; i <aliens.length; i++){
-                    aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
-                }
-                collision2 = false;
-                for(int x = 0; x <aliens.length; ++x){
-                    if(aliens[x].rect.intersects(trex.rect) || aliens[x].rect.intersects(dino.rect)){
-                        collision2 = true;
-                    }
-                }
-            }
+
+
 
             for (int i = 0; i < aliens.length; ++i) {
                 g.drawImage(alienImage, aliens[i].xpos, aliens[i].ypos, aliens[i].width, aliens[i].height, null);
             }
             for (int i = 0; i < ferns.length; ++i) {
-                g.drawImage(fernImage, ferns[i].xpos, ferns[i].ypos, ferns[i].width, ferns[i].height, null);
+                if(ferns[i] != null) {
+                    g.drawImage(fernImage, ferns[i].xpos, ferns[i].ypos, ferns[i].width, ferns[i].height, null);
+                }
             }
         }
 
