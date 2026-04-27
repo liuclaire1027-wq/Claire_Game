@@ -57,6 +57,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean level2;
     boolean collision = true;
     boolean collision2= true;
+    int ferncounter = 0;
 
     boolean level3;
     boolean gameOver;
@@ -190,7 +191,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 
     }
-    int ferncounter = 0;
+
     public void dinoferncheckCrash(){
         for(int i = 0; i < ferns.length; ++i){
             if(ferns[i]!= null && ferns[i].rect.intersects(dino.rect)){
@@ -283,7 +284,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             while(collision2 == true){
                 aliens = new Alien[8];
                 for(int i = 0; i <aliens.length; i++){
-                    aliens[i] = new Alien("aliens" + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * HEIGHT) + 100);
+                    aliens[i] = new Alien("aliens" + i, (int) (Math.random() * 700) + 1, (int) (Math.random() * HEIGHT) + 10);
                 }
                 collision2 = false;
                 for(int x = 0; x <aliens.length; ++x){
@@ -295,7 +296,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
             ferns = new Fern[5];
             for(int i = 0; i < ferns.length; ++i) {
-                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * WIDTH) + 10, (int) (Math.random() * HEIGHT) + 10);
+                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * 700) + 1, (int) (Math.random() * HEIGHT) + 100);
             }
             portal1.isAlive = true;
             portal2.isAlive = true;
@@ -323,6 +324,14 @@ public class BasicGameApp implements Runnable, KeyListener {
                     g.drawImage(fernImage, ferns[i].xpos, ferns[i].ypos, ferns[i].width, ferns[i].height, null);
                 }
             }
+
+            g.setColor(Color.WHITE);
+            g.fillRect(750,100,200,100);
+            g.setColor(Color.BLACK);
+            g.setFont((new Font("plain", Font.BOLD,20)));
+            g.drawString("Fern Counter:", 760,150);
+            g.drawString(String.valueOf(ferncounter) + "/" + String.valueOf(ferns.length), 760, 170);
+
         }
 
 //        if(ferncounter == ferns.length){
