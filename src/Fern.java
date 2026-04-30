@@ -43,7 +43,7 @@ public class Fern {
     public void move() {
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rect = new Rectangle(xpos, ypos, width, height);
+        rect = new Rectangle(xpos, ypos, width-20, height-20);
 
         if(xpos > 1000 -width){
             dx = -dx;

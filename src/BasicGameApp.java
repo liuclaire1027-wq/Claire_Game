@@ -61,6 +61,8 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     boolean level3;
     boolean gameOver;
+    boolean gameOver2;
+    boolean youWin;
 
     //public boolean firstCrash;
     public boolean pressingKey;
@@ -83,6 +85,8 @@ public class BasicGameApp implements Runnable, KeyListener {
         level1 = true;
         level2 = false;
         gameOver = false;
+        gameOver2 = false;
+        youWin = false;
         pressingKey = false;
         dino = new Dino("dino.png", 300, 500);
         dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
@@ -93,7 +97,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             portal1 = new Portal("portal.png", 700, 600);
             portal2 = new Portal("portal.png", 100, 100);
             meteorImage = Toolkit.getDefaultToolkit().getImage("meteor.png");
-            meteorShower = new Meteor[1];
+            meteorShower = new Meteor[5];
             for (int i = 0; i < meteorShower.length; i++) {
                 meteorShower[i] = new Meteor("meteor " + i, (int) (Math.random() * WIDTH) + 100, (int) (Math.random() * 100));
 
@@ -244,10 +248,22 @@ public class BasicGameApp implements Runnable, KeyListener {
             g.setFont((new Font("plain", Font.BOLD,100)));
             g.drawString("Game Over", 225,375);
 
-            //how to make everything null
+        }
+        if(gameOver2 == true){
+            g.setBackground(Color.BLACK);
+            g.clearRect(0, 0, WIDTH, HEIGHT);
+            g.setColor(Color.WHITE);
+            g.setFont((new Font("plain", Font.BOLD,100)));
+            g.drawString("Game Over", 225,375);
 
+        }
 
-
+        if(youWin == true){
+            g.setBackground(Color.BLACK);
+            g.clearRect(0, 0, WIDTH, HEIGHT);
+            g.setColor(Color.WHITE);
+            g.setFont((new Font("plain", Font.BOLD,100)));
+            g.drawString("You win!!!", 225,375);
 
         }
 
@@ -260,7 +276,12 @@ public class BasicGameApp implements Runnable, KeyListener {
             g.drawImage(portalImage, portal2.xpos, portal2.ypos, portal2.width, portal2.height, null);
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
+            if(dino.isAlive == false && trex.isAlive == false){
+                gameOver = true;
+                level1 = false;
+            }
         }
+
 
 
         if(dino.isAlive == false){
@@ -271,20 +292,20 @@ public class BasicGameApp implements Runnable, KeyListener {
             trexImage = boom;
         }
 
-        if(dino.isAlive == false && trex.isAlive == false){
-            gameOver = true;
-            level1 = false;
-        }
+
 
 
         if(portal1.isAlive == false && portal2.isAlive == false) {
             level1 = false;
+            dino.isAlive = true;
+            trex.isAlive = true;
+
 
            alienImage = Toolkit.getDefaultToolkit().getImage("alien.png");
             while(collision2 == true){
                 aliens = new Alien[8];
                 for(int i = 0; i <aliens.length; i++){
-                    aliens[i] = new Alien("aliens" + i, (int) (Math.random() * 700) + 1, (int) (Math.random() * HEIGHT) + 10);
+                    aliens[i] = new Alien("aliens" + i, (int) (Math.random() * 600) + 1, (int) (Math.random() * 600) + 100);
                 }
                 collision2 = false;
                 for(int x = 0; x <aliens.length; ++x){
@@ -296,7 +317,7 @@ public class BasicGameApp implements Runnable, KeyListener {
             fernImage = Toolkit.getDefaultToolkit().getImage("fern.png");
             ferns = new Fern[5];
             for(int i = 0; i < ferns.length; ++i) {
-                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * 700) + 1, (int) (Math.random() * HEIGHT) + 100);
+                ferns[i] = new Fern("ferns" + i, (int) (Math.random() * 600) + 1, (int) (Math.random() * (600)) + 100);
             }
             portal1.isAlive = true;
             portal2.isAlive = true;
@@ -309,6 +330,9 @@ public class BasicGameApp implements Runnable, KeyListener {
                 meteorShower[i] = null;
             }
             g.drawImage(space,0,0,WIDTH,HEIGHT, null);
+            trexImage = Toolkit.getDefaultToolkit().getImage("trex.png");
+            dinoImage = Toolkit.getDefaultToolkit().getImage("dino.png");
+
 
             g.drawImage(dinoImage, dino.xpos, dino.ypos, dino.width, dino.height, null);
             g.drawImage(trexImage, trex.xpos, trex.ypos, trex.width, trex.height, null);
@@ -331,18 +355,21 @@ public class BasicGameApp implements Runnable, KeyListener {
             g.setFont((new Font("plain", Font.BOLD,20)));
             g.drawString("Fern Counter:", 760,150);
             g.drawString(String.valueOf(ferncounter) + "/" + String.valueOf(ferns.length), 760, 170);
+            if(dino.isAlive == false && trex.isAlive == false){
+                gameOver2 = true;
+                level2 = false;
+            }
+            if (ferncounter == ferns.length){
+                youWin = true;
+                level2 = false;
 
+            }
         }
 
-//        if(ferncounter == ferns.length){
-//            level1 = false;
-//            level2 = false;
-//            level3 = true;
-//            g.clearRect(0, 0, WIDTH, HEIGHT);
-//            for(int i = 0; i < ferns.length; ++i){
-//                ferns[i] = null;
-//            }
-//        }
+
+
+
+
 
         g.dispose();
         bufferStrategy.show();

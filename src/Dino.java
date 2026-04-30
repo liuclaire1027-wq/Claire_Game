@@ -32,7 +32,7 @@ public class Dino {
         width = 100;
         height = 100;
         isAlive = true;
-        rect = new Rectangle(xpos, ypos, width-80, height-80);
+        rect = new Rectangle(xpos, ypos, width-90, height-90);
 
         health = 100;
  

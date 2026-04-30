@@ -32,7 +32,7 @@ public class Alien {
         width = 100;
         height = 100;
         isAlive = true;
-        rect = new Rectangle(xpos, ypos, width, height);
+        rect = new Rectangle(xpos, ypos, width-70, height-70);
 
 
  
@@ -43,7 +43,7 @@ public class Alien {
     public void move() {
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rect = new Rectangle(xpos, ypos, width, height);
+        rect = new Rectangle(xpos, ypos, width-60, height-60);
 
         if(xpos > 1000 -width){
             dx = -dx;

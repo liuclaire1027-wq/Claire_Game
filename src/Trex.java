@@ -33,7 +33,7 @@ public class Trex {
         width = 100;
         height = 100;
         isAlive = true;
-        rect = new Rectangle(xpos, ypos, width-80, height-80);
+        rect = new Rectangle(xpos, ypos, width, height);
 
         health = 100;
 
@@ -48,7 +48,7 @@ public class Trex {
     public void bounce() {
         xpos = xpos + dx;
         ypos = ypos + dy;
-        rect = new Rectangle(xpos, ypos, width, height);
+        rect = new Rectangle(xpos, ypos, width-90, height-90);
 
         if(xpos >= 1000 - width){
             dx = -dx;

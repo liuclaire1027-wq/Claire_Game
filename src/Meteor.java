@@ -42,7 +42,7 @@ public class Meteor {
     public void move() {
         //xpos = xpos + dx;
         ypos = ypos + dy;
-        rect = new Rectangle(xpos, ypos, width, height);
+        rect = new Rectangle(xpos, ypos, width-30, height-30);
         if(ypos >= 700){
             ypos = 0;
         }
